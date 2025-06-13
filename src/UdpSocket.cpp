@@ -40,12 +40,64 @@ NetResult<size_t> UdpSocket::recvFrom(void* buffer, size_t size, SocketAddress& 
     return this->_recvFrom(buffer, size, sender, recvFlags());
 }
 
+NetResult<size_t> UdpSocket::recvFrom(void* buffer, size_t size, SocketAddressV4& sender) {
+    SocketAddress genericAddr = SocketAddressV4{};
+
+    auto result = this->_recvFrom(buffer, size, genericAddr, recvFlags());
+
+    if (!genericAddr.isV4()) {
+        return Err(Error::UnsupportedFamily);
+    }
+
+    sender = genericAddr.toV4();
+    return result;
+}
+
+NetResult<size_t> UdpSocket::recvFrom(void* buffer, size_t size, SocketAddressV6& sender) {
+    SocketAddress genericAddr = SocketAddressV6{};
+
+    auto result = this->_recvFrom(buffer, size, genericAddr, recvFlags());
+
+    if (!genericAddr.isV6()) {
+        return Err(Error::UnsupportedFamily);
+    }
+
+    sender = genericAddr.toV6();
+    return result;
+}
+
 NetResult<size_t> UdpSocket::recv(void* buffer, size_t size) {
     return this->_recv(buffer, size, recvFlags());
 }
 
 NetResult<size_t> UdpSocket::peekFrom(void* buffer, size_t size, SocketAddress& sender) {
     return this->_recvFrom(buffer, size, sender, recvFlags() | MSG_PEEK);
+}
+
+NetResult<size_t> UdpSocket::peekFrom(void* buffer, size_t size, SocketAddressV4& sender) {
+    SocketAddress genericAddr = SocketAddressV4{};
+
+    auto result = this->_recvFrom(buffer, size, genericAddr, recvFlags() | MSG_PEEK);
+
+    if (!genericAddr.isV4()) {
+        return Err(Error::UnsupportedFamily);
+    }
+
+    sender = genericAddr.toV4();
+    return result;
+}
+
+NetResult<size_t> UdpSocket::peekFrom(void* buffer, size_t size, SocketAddressV6& sender) {
+    SocketAddress genericAddr = SocketAddressV6{};
+
+    auto result = this->_recvFrom(buffer, size, genericAddr, recvFlags() | MSG_PEEK);
+
+    if (!genericAddr.isV6()) {
+        return Err(Error::UnsupportedFamily);
+    }
+
+    sender = genericAddr.toV6();
+    return result;
 }
 
 NetResult<size_t> UdpSocket::peek(void* buffer, size_t size) {

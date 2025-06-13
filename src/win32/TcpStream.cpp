@@ -25,7 +25,7 @@ NetResult<void> TcpStream::doConnectTimeout(const SocketAddress& address, int ti
     auto result = this->doConnect(address);
     GEODE_UNWRAP(this->setNonBlocking(false));
 
-    if (result.isErr() && result.unwrapErr().osCode() == WSAEWOULDBLOCK) {
+    if (result.isErr() && result.unwrapErr() == Error::WouldBlock) {
         // wait for the socket to become writable
     } else {
         return result;

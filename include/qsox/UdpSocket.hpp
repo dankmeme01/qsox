@@ -32,12 +32,26 @@ public:
     // On success, returns the number of bytes received.
     NetResult<size_t> recvFrom(void* buffer, size_t size, SocketAddress& sender);
 
+    // Receives a single datagram from the socket. If the buffer is too small, excess data is discarded.
+    // On success, returns the number of bytes received.
+    NetResult<size_t> recvFrom(void* buffer, size_t size, SocketAddressV4& sender);
+
+    // Receives a single datagram from the socket. If the buffer is too small, excess data is discarded.
+    // On success, returns the number of bytes received.
+    NetResult<size_t> recvFrom(void* buffer, size_t size, SocketAddressV6& sender);
+
     // Receives a single datagram from the connected address. If the buffer is too small, excess data is discarded.
     // On success returns the number of bytes received, will fail if the socket is not connected.
     NetResult<size_t> recv(void* buffer, size_t size);
 
     // Peeks at the next datagram in the socket without removing it from the queue.
     NetResult<size_t> peekFrom(void* buffer, size_t size, SocketAddress& sender);
+
+    // Peeks at the next datagram in the socket without removing it from the queue.
+    NetResult<size_t> peekFrom(void* buffer, size_t size, SocketAddressV4& sender);
+
+    // Peeks at the next datagram in the socket without removing it from the queue.
+    NetResult<size_t> peekFrom(void* buffer, size_t size, SocketAddressV6& sender);
 
     // Peeks at the next datagram in the connected socket without removing it from the queue.
     // Will fail if the socket is not connected.

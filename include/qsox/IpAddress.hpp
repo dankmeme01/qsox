@@ -19,6 +19,16 @@ public:
     constexpr inline IpAddress(const IpAddress& other) = default;
     constexpr inline IpAddress& operator=(const IpAddress& other) = default;
 
+    constexpr inline IpAddress& operator=(const Ipv4Address& addr) {
+        m_address = addr;
+        return *this;
+    }
+
+    constexpr inline IpAddress& operator=(const Ipv6Address& addr) {
+        m_address = addr;
+        return *this;
+    }
+
     constexpr inline bool operator==(const IpAddress& other) const {
         return m_address == other.m_address;
     }

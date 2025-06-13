@@ -40,9 +40,26 @@ Result<SocketAddress, SocketAddressParseError> SocketAddress::parse(std::string_
     std::string_view addressPart = str.substr(0, colonPos);
     std::string_view portPart = str.substr(colonPos + 1);
 
-    auto address = IpAddress::parse(std::string(addressPart));
-    if (!address) {
-        return Err(SocketAddressParseError::InvalidAddress);
+    IpAddress outAddr = Ipv4Address::UNSPECIFIED;
+
+    // if the address is enclosed in square brackets, it must be ipv6, and we need to remove them
+    if (addressPart.size() >= 2 && addressPart.front() == '[' && addressPart.back() == ']') {
+        addressPart.remove_prefix(1);
+        addressPart.remove_suffix(1);
+
+        auto addr = Ipv6Address::parse(std::string(addressPart));
+        if (!addr) {
+            return Err(SocketAddressParseError::InvalidAddress);
+        }
+
+        outAddr = *addr;
+    } else {
+        auto addr = Ipv4Address::parse(std::string(addressPart));
+        if (!addr) {
+            return Err(SocketAddressParseError::InvalidAddress);
+        }
+
+        outAddr = *addr;
     }
 
     uint16_t port = 0;
@@ -51,7 +68,7 @@ Result<SocketAddress, SocketAddressParseError> SocketAddress::parse(std::string_
         return Err(SocketAddressParseError::InvalidPort);
     }
 
-    return Ok(SocketAddress{*address, port});
+    return Ok(SocketAddress{outAddr, port});
 }
 
 int SocketAddress::family() const {
