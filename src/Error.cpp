@@ -84,6 +84,8 @@ std::string Error::message() const {
             return "Network is down";
         case Code::AlreadyShutdown:
             return "Socket is already shutdown";
+        case Code::Unimplemented:
+            return "Operation is not implemented";
         case Code::Other:
             unreachable();
     }

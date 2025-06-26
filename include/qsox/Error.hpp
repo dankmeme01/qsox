@@ -25,6 +25,7 @@ namespace qsox {
             AddressInUse,
             NetworkDown,
             AlreadyShutdown,
+            Unimplemented,
             Other, // meaning other OS error
         } Code;
 

@@ -16,6 +16,8 @@ namespace qsox::resolver {
 
 std::string_view Error::message() const {
     switch (m_code) {
+        case Success:
+            return "Success";
         case AddrFamily:
             return "Host does not support the requested address family";
         case TemporaryFailure:
