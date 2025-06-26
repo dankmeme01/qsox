@@ -76,4 +76,8 @@ Error BaseSocket::getSocketError() const {
     return Error::fromOs(err);
 }
 
+NetResult<> initSockets() {
+    return startupSockets();
+}
+
 } // namespace qsox

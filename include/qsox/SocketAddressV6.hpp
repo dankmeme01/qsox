@@ -29,6 +29,10 @@ public:
         return !(*this == other);
     }
 
+    static constexpr inline SocketAddressV6 any() {
+        return SocketAddressV6(Ipv6Address::UNSPECIFIED, 0);
+    }
+
     constexpr inline const Ipv6Address& address() const {
         return m_address;
     }

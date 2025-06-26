@@ -23,6 +23,14 @@ public:
     constexpr inline SocketAddress(const SocketAddress& other) = default;
     constexpr inline SocketAddress& operator=(const SocketAddress& other) = default;
 
+    static constexpr inline SocketAddress any(bool v6 = true) {
+        if (v6) {
+            return SocketAddress(SocketAddressV6::any());
+        } else {
+            return SocketAddress(SocketAddressV4::any());
+        }
+    }
+
     // allow assignment from SocketAddressV4 and SocketAddressV6
     constexpr inline SocketAddress& operator=(const SocketAddressV4& addr) {
         m_address = addr.address();
@@ -102,6 +110,10 @@ public:
 
     constexpr inline SocketAddressV6 toV6() const {
         return SocketAddressV6(m_address.asV6(), m_port);
+    }
+
+    constexpr inline IpAddress ip() const {
+        return m_address;
     }
 
     // Parsing/formatting

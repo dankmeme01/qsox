@@ -10,6 +10,8 @@ class UdpSocket : public BaseSocket {
 public:
     // Creates a new UDP socket, binding to the given address
     static NetResult<UdpSocket> bind(const SocketAddress& address);
+    // Creates a new UDP socket, binding to 0.0.0.0 and a random port
+    static NetResult<UdpSocket> bindAny(bool ipv6 = true);
 
     UdpSocket(UdpSocket&& other) noexcept = default;
     UdpSocket& operator=(UdpSocket&& other) noexcept = default;

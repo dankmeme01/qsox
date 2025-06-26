@@ -28,13 +28,13 @@ add_library(${PROJECT_NAME} STATIC ${HEADERS} ${SOURCES})
 if (WIN32)
     # fix debug builds
     target_compile_definitions(${PROJECT_NAME} PRIVATE _HAS_ITERATOR_DEBUGGING=0)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32) # link to winsock
+    target_link_libraries(${PROJECT_NAME} PUBLIC ws2_32) # link to winsock
 endif()
 
 CPMAddPackage("gh:geode-sdk/result@1.3.2")
 CPMAddPackage("gh:fmtlib/fmt#11.2.0")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE GeodeResult fmt)
+target_link_libraries(${PROJECT_NAME} PUBLIC GeodeResult fmt)
 target_compile_definitions(${PROJECT_NAME} PRIVATE NOMINMAX=1)
 
 # weird stuff

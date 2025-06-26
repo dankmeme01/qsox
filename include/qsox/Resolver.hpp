@@ -10,6 +10,7 @@
 namespace qsox::resolver {
 
 QSOX_MAKE_ERROR_STRUCT(Error,
+    Success,
     AddrFamily,
     TemporaryFailure,
     PermanentFailure,

@@ -13,6 +13,11 @@ NetResult<UdpSocket> UdpSocket::bind(const SocketAddress& address) {
     });
 }
 
+NetResult<UdpSocket> UdpSocket::bindAny(bool ipv6) {
+    IpAddress addr = ipv6 ? IpAddress{Ipv6Address::UNSPECIFIED} : IpAddress{Ipv4Address::UNSPECIFIED};
+
+    return bind(SocketAddress{addr, 0});
+}
 
 NetResult<void> UdpSocket::connect(const SocketAddress& address) {
     SockAddrAny addrStorage = address;

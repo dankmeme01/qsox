@@ -56,4 +56,7 @@ enum class ShutdownMode {
     Read, Write, Both
 };
 
+// Performs initialization of the system socket API (WSAStartup on Windows)
+NetResult<> initSockets();
+
 }

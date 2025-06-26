@@ -30,6 +30,10 @@ public:
         return !(*this == other);
     }
 
+    static constexpr inline SocketAddressV4 any() {
+        return SocketAddressV4(Ipv4Address::UNSPECIFIED, 0);
+    }
+
     constexpr inline const Ipv4Address& address() const {
         return m_address;
     }
