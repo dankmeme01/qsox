@@ -238,6 +238,17 @@ inline NetResult<BaseSocket::SockFd> newBoundSocket(const SocketAddress& address
 
     SockAddrAny addrStorage = address;
 
+    // explicitly disable v6 only mode for v6 sockets
+#ifdef IPV6_V6ONLY
+    if (address.isV6()) {
+        int v6only = 0;
+        if (setsockopt(sock, IPPROTO_IPV6, IPV6_V6ONLY, reinterpret_cast<const char*>(&v6only), sizeof(v6only)) < 0) {
+            qsox::closeSocket(sock);
+            return Err(Error::lastOsError());
+        }
+    }
+#endif
+
     if (::bind(sock, addrStorage.asSockaddr(), addrStorage.size()) < 0) {
         qsox::closeSocket(sock);
         return Err(Error::lastOsError());
