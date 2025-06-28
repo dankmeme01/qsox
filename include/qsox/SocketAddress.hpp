@@ -5,6 +5,8 @@
 #include "SocketAddressV6.hpp"
 #include "IpAddress.hpp"
 
+struct sockaddr;
+
 namespace qsox {
 
 QSOX_MAKE_ERROR_STRUCT(SocketAddressParseError,
@@ -120,6 +122,7 @@ public:
 
     std::string toString() const;
     static Result<SocketAddress, SocketAddressParseError> parse(std::string_view str);
+    static SocketAddress fromSockAddr(const sockaddr& addr);
 
     // Returns the address family (AF_INET or AF_INET6)
     int family() const;

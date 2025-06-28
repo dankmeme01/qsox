@@ -3,9 +3,10 @@
 #include <charconv>
 
 #ifdef _WIN32
-# include <WinSock2.h>
+# include <ws2tcpip.h>
 #else
 # include <sys/socket.h>
+# include <netinet/in.h>
 #endif
 
 namespace qsox {
@@ -73,6 +74,16 @@ Result<SocketAddress, SocketAddressParseError> SocketAddress::parse(std::string_
 
 int SocketAddress::family() const {
     return this->isV4() ? AF_INET : AF_INET6;
+}
+
+SocketAddress SocketAddress::fromSockAddr(const sockaddr& addr) {
+    if (addr.sa_family == AF_INET) {
+        const auto addrV4 = reinterpret_cast<const sockaddr_in&>(addr);
+        return SocketAddressV4::fromSockAddr(addrV4);
+    } else {
+        const auto addrV6 = reinterpret_cast<const sockaddr_in6&>(addr);
+        return SocketAddressV6::fromSockAddr(addrV6);
+    }
 }
 
 }
