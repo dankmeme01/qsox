@@ -34,7 +34,8 @@ endif()
 CPMAddPackage("gh:geode-sdk/result@1.3.2")
 CPMAddPackage("gh:fmtlib/fmt#11.2.0")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC GeodeResult fmt)
+target_link_libraries(${PROJECT_NAME} PUBLIC GeodeResult)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_compile_definitions(${PROJECT_NAME} PRIVATE NOMINMAX=1)
 
 # weird stuff

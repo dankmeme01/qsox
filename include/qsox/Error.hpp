@@ -89,3 +89,15 @@ namespace qsox {
     private: \
         Code m_code; \
     }
+
+#define QSOX_MAKE_OPAQUE_ERROR_STRUCT(name, ty) \
+    struct name { \
+        ty code; \
+        constexpr inline name(ty code) : code(code) {} \
+        constexpr inline name(const name& other) = default; \
+        constexpr inline name& operator=(const name& other) = default; \
+        constexpr inline bool operator==(const name& other) const { return code == other.code; } \
+        constexpr inline bool operator!=(const name& other) const { return !(*this == other); } \
+        bool ok() const; \
+        std::string_view message() const; \
+    }

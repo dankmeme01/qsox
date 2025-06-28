@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Error.hpp"
+#include "BaseSocket.hpp"
 #include <stddef.h>
 
 namespace qsox {
@@ -20,6 +21,6 @@ enum class PollType {
 
 // Specify timeout in milliseconds, or -1 for indefinite wait
 // TODO: this is not properly implemented nor tested
-NetResult<PollResult> pollOne(int fd, PollType poll, int timeoutMs);
+NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs);
 
 }

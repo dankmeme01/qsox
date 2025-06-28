@@ -4,7 +4,9 @@
 
 namespace qsox {
 
-NetResult<PollResult> pollOne(int fd, PollType poll, int timeoutMs) {
+NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs) {
+    int fd = socket.handle();
+
     struct pollfd pfd;
     pfd.fd = fd;
     pfd.events = 0;
@@ -39,9 +41,8 @@ NetResult<PollResult> pollOne(int fd, PollType poll, int timeoutMs) {
             } else {
                 return Err(error);
             }
-        } else if ((pfd.revents & (POLLHUP | POLLERR)) != 0) {
-            // TODO: idk if this is correct
-            return Err(Error::lastOsError());
+        } else if ((pfd.revents & (POLLHUP | POLLERR | POLLNVAL)) != 0) {
+            return Err(socket.getSocketError());
         } else {
             break;
         }
@@ -54,8 +55,7 @@ NetResult<PollResult> pollOne(int fd, PollType poll, int timeoutMs) {
     } else if (pfd.revents & POLLOUT) {
         return Ok(PollResult::Writable); // socket is ready for writing
     } else if (pfd.revents & POLLERR) {
-        // TODO: maybe get SO_ERROR or smth
-        return Err(Error::lastOsError()); // socket has an error
+        return Err(socket.getSocketError()); // socket has an error
     }
 
     // TODO: uhh idk if reachable

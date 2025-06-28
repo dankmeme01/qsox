@@ -5,7 +5,6 @@
 namespace qsox {
 
 Error Error::lastOsError(bool wsa) {
-    // TODO: map into other types than Other
     auto code = wsa ? WSAGetLastError() : GetLastError();
 
     switch (code) {
