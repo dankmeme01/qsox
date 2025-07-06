@@ -5,14 +5,16 @@
 
 namespace qsox {
 
-// Base socket class. Applications should not use this.
-class BaseSocket {
-public:
 #ifdef _WIN32
     using SockFd = uintptr_t; // SOCKET is a UINT_PTR on windows which is pointer sized unsigned integer
 #else
     using SockFd = int;
 #endif
+
+// Base socket class. Applications should not use this.
+class BaseSocket {
+public:
+    using SockFd = qsox::SockFd;
 
     ~BaseSocket();
 

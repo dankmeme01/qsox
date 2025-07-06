@@ -13,14 +13,33 @@ enum class PollResult {
     Timeout,   // poll timed out
 };
 
-enum class PollType {
-    Read,      // poll for readability
-    Write,     // poll for writability
-    Error,     // poll for errors
+struct PollType {
+    enum Pt : uint8_t {
+        Read =  0b001,     // poll for readability
+        Write = 0b010,     // poll for writability
+        ReadWrite = Read | Write,
+    } p;
+
+    PollType(Pt type) : p(type) {}
+
+    bool operator==(const PollType& other) const {
+        return p == other.p;
+    }
+
+    bool operator==(Pt other) const {
+        return p == other;
+    }
+
+    bool operator&(const PollType& other) const {
+        return (p & other.p) != 0;
+    }
+
+    bool operator&(Pt other) const {
+        return (p & other) != 0;
+    }
 };
 
 // Specify timeout in milliseconds, or -1 for indefinite wait
-// TODO: this is not properly implemented nor tested
 NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs);
 
 }

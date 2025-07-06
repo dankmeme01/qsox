@@ -9,18 +9,14 @@ NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs) 
 
     struct pollfd pfd;
     pfd.fd = fd;
-    pfd.events = 0;
+    pfd.events = POLLERR;
 
-    switch (poll) {
-        case PollType::Read:
-            pfd.events = POLLIN;
-            break;
-        case PollType::Write:
-            pfd.events = POLLOUT;
-            break;
-        case PollType::Error:
-            pfd.events = POLLERR;
-            break;
+    if (poll & PollType::Read) {
+        pfd.events |= POLLIN;
+    }
+
+    if (poll & PollType::Write) {
+        pfd.events |= POLLOUT;
     }
 
     if (timeoutMs == 0) {
