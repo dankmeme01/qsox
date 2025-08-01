@@ -60,6 +60,8 @@ public:
     NetResult<size_t> peek(void* buffer, size_t size);
 
 private:
+    bool ipv6 = false;
+
     UdpSocket(SockFd fd);
 
     NetResult<size_t> _sendTo(const void* buffer, size_t size, const SocketAddress& destination, int flags);

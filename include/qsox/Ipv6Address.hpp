@@ -78,6 +78,8 @@ public:
     // If the address does not start with ::ffff, it will return std::nullopt.
     std::optional<Ipv4Address> toIpv4Mapped() const;
 
+    static Ipv6Address fromIpv4Mapped(const Ipv4Address& addr);
+
     // Returns whether the address is unspecified (::)
     constexpr inline bool isUnspecified() const {
         return m_octets == UNSPECIFIED.m_octets;

@@ -72,6 +72,17 @@ std::optional<Ipv4Address> Ipv6Address::toIpv4Mapped() const {
     );
 }
 
+Ipv6Address Ipv6Address::fromIpv4Mapped(const Ipv4Address& addr) {
+    std::array<uint8_t, 16> octets = {};
+    octets[10] = 0xff;
+    octets[11] = 0xff;
+    octets[12] = addr[0];
+    octets[13] = addr[1];
+    octets[14] = addr[2];
+    octets[15] = addr[3];
+    return Ipv6Address(octets);
+}
+
 Result<Ipv6Address, Ipv6ParseError> Ipv6Address::parse(const std::string& str) {
     // Parsing an IPv6 address is significantly more complex than ipv4, so let's just use inet_pton for now
 

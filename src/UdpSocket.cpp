@@ -2,14 +2,17 @@
 #include "SocketUtil.hpp"
 
 #include <cassert>
+#include <fmt/core.h>
 
 namespace qsox {
 
 UdpSocket::UdpSocket(SockFd fd) : BaseSocket(fd) {}
 
 NetResult<UdpSocket> UdpSocket::bind(const SocketAddress& address) {
-    return qsox::newBoundSocket(address, SOCK_DGRAM).map([](SockFd fd) {
-        return UdpSocket(fd);
+    return qsox::newBoundSocket(address, SOCK_DGRAM).map([&](SockFd fd) {
+        UdpSocket sock{fd};
+        sock.ipv6 = address.isV6();
+        return sock;
     });
 }
 
@@ -111,6 +114,18 @@ NetResult<size_t> UdpSocket::peek(void* buffer, size_t size) {
 
 NetResult<size_t> UdpSocket::_sendTo(const void* buffer, size_t size, const SocketAddress& destination, int flags) {
     SockAddrAny addrStorage = destination;
+
+#ifdef _WIN32
+    // On lovely operating systems like windows, an IPv6 socket cannot send to an IPv4 address,
+    // but can send to an IPv4-mapped IPv6 address, so perform the conversion here.
+    if (this->ipv6 && destination.isV4()) {
+        SocketAddressV6 v6Addr{};
+        v6Addr.setAddress(Ipv6Address::fromIpv4Mapped(destination.toV4().address()));
+        v6Addr.setPort(destination.port());
+
+        addrStorage = v6Addr;
+    }
+#endif
 
     auto sent = ::sendto(m_fd, static_cast<const char*>(buffer), size, flags,
                           addrStorage.asSockaddr(), addrStorage.size());
