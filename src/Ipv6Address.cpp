@@ -35,8 +35,7 @@ Ipv6Address::Ipv6Address(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_
         qsox::byteswap(h)
     };
 
-    std::array<uint8_t, 16> octets;
-    memcpy(octets.data(), groups.data(), sizeof(groups));
+    memcpy(m_octets.data(), groups.data(), sizeof(groups));
 }
 
 std::array<uint16_t, 8> Ipv6Address::segments() const {
