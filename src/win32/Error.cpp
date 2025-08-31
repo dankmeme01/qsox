@@ -31,6 +31,7 @@ Error Error::lastOsError(bool wsa) {
         case WSAEADDRINUSE:
             return Code::AddressInUse;
         case WSAENETDOWN:
+        case WSAENETUNREACH:
             return Code::NetworkDown;
         case WSAECONNABORTED:
             return Code::ConnectionAborted;

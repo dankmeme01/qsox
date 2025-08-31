@@ -81,7 +81,7 @@ std::string Error::message() const {
         case Code::AddressInUse:
             return "Address already in use";
         case Code::NetworkDown:
-            return "Network is down";
+            return "Network is unreachable";
         case Code::AlreadyShutdown:
             return "Socket is already shutdown";
         case Code::Unimplemented:
