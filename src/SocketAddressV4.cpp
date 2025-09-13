@@ -30,14 +30,12 @@ std::string_view SocketAddressV4ParseError::message() const {
 }
 
 static SocketAddressV4ParseError fromIpv4Error(const Ipv4ParseError& error) {
-    using enum Ipv4ParseError::Code;
-
     switch (error.code()) {
-        case MissingOctets:
+        case Ipv4ParseError::MissingOctets:
             return SocketAddressV4ParseError::MissingOctets;
-        case TrailingData:
+        case Ipv4ParseError::TrailingData:
             return SocketAddressV4ParseError::TrailingData;
-        case InvalidOctet:
+        case Ipv4ParseError::InvalidOctet:
             return SocketAddressV4ParseError::InvalidOctet;
     }
 

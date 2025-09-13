@@ -28,10 +28,8 @@ std::string_view SocketAddressV6ParseError::message() const {
 }
 
 static SocketAddressV6ParseError fromIpError(const Ipv6ParseError& error) {
-    using enum Ipv6ParseError::Code;
-
     switch (error.code()) {
-        case Unspecified:
+        case Ipv6ParseError::Unspecified:
             return SocketAddressV6ParseError::InvalidAddress;
     }
 
