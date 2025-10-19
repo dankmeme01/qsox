@@ -75,7 +75,7 @@ Result<Ip> findAndConvert(const std::string& hostname) {
 
     struct addrinfo* addrInfo = addrInfoRes.unwrap();
 
-    auto addr = (SockAddr*) findFirstAddress(addrInfo, Family);
+    auto addr = (SockAddr*) findFirstAddress(addrInfo, Family)->ai_addr;
 
     if (!addr) {
         freeaddrinfo(addrInfo);
