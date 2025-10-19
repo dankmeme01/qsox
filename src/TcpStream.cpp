@@ -116,4 +116,10 @@ NetResult<void> TcpStream::setNoDelay(bool noDelay) {
     );
 }
 
+SockFd TcpStream::releaseHandle() {
+    SockFd fd = m_fd;
+    m_fd = InvalidSockFd;
+    return fd;
+}
+
 }

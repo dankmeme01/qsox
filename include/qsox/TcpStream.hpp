@@ -40,6 +40,9 @@ public:
     // Peeks at incoming data without removing it from the queue.
     NetResult<size_t> peek(void* buffer, size_t size);
 
+    // Releases the underlying socket file descriptor, preventing it from being closed on destruction.
+    SockFd releaseHandle();
+
 private:
     TcpStream(SockFd fd);
 
