@@ -6,16 +6,24 @@ namespace qsox {
 TcpStream::TcpStream(SockFd fd) : BaseSocket(fd) {}
 
 NetResult<TcpStream> TcpStream::connect(const SocketAddress& address, int timeoutMs) {
+    return connectInternal(address, false, timeoutMs);
+}
+
+NetResult<TcpStream> TcpStream::connectNonBlocking(const SocketAddress& address) {
+    return connectInternal(address, true, 0);
+}
+
+NetResult<TcpStream> TcpStream::connectInternal(const SocketAddress& address, bool nb, int timeout) {
     SockFd socket;
     GEODE_UNWRAP_INTO(socket, newSocket(address.family(), SOCK_STREAM));
 
     // create early to take advantage of raii
     TcpStream stream(socket);
 
-    if (timeoutMs > 0) {
-        GEODE_UNWRAP(stream.doConnectTimeout(address, timeoutMs));
+    if (!nb && timeout > 0) {
+        GEODE_UNWRAP(stream.doConnectTimeout(address, timeout));
     } else {
-        GEODE_UNWRAP(stream.doConnect(address));
+        GEODE_UNWRAP(stream.doConnect(address, nb));
     }
 
     return Ok(std::move(stream));

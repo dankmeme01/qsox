@@ -11,6 +11,9 @@ public:
     // If the timeout is set to 0ms, the function may block indefinitely.
     static NetResult<TcpStream> connect(const SocketAddress& address, int timeoutMs = 5000);
 
+    // Creates a new TCP stream, sets the socket to non-blocking mode and connects to the given address.
+    static NetResult<TcpStream> connectNonBlocking(const SocketAddress& address);
+
     TcpStream(TcpStream&& other) noexcept = default;
     TcpStream& operator=(TcpStream&& other) noexcept = default;
 
@@ -47,7 +50,9 @@ private:
     TcpStream(SockFd fd);
 
     NetResult<size_t> _receive(void* buffer, size_t size, int flags);
-    NetResult<void> doConnect(const SocketAddress& address);
+
+    static NetResult<TcpStream> connectInternal(const SocketAddress& address, bool nonBlocking, int timeoutMs);
+    NetResult<void> doConnect(const SocketAddress& address, bool nonBlocking);
     NetResult<void> doConnectTimeout(const SocketAddress& address, int timeoutMs);
 
     friend class TcpListener;

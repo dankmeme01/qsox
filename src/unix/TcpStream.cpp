@@ -7,15 +7,23 @@ using hclock = std::chrono::high_resolution_clock;
 
 namespace qsox {
 
-NetResult<void> TcpStream::doConnect(const SocketAddress& address) {
+NetResult<void> TcpStream::doConnect(const SocketAddress& address, bool nonBlocking) {
     // convert address
     SockAddrAny addrStorage = address;
+
+    if (nonBlocking) {
+        GEODE_UNWRAP(this->setNonBlocking(true));
+    }
 
     // attempt to connect
     while (true) {
         int cres = ::connect(m_fd, addrStorage.asSockaddr(), addrStorage.size());
 
         if (cres == -1) {
+            if (nonBlocking && errno == EINPROGRESS) {
+                return Ok();
+            }
+
             switch(errno) {
                 case EINTR: continue;
                 case EISCONN: return Ok();
@@ -30,7 +38,7 @@ NetResult<void> TcpStream::doConnect(const SocketAddress& address) {
 
 NetResult<void> TcpStream::doConnectTimeout(const SocketAddress& address, int timeoutMs) {
     if (timeoutMs <= 0) {
-        return doConnect(address);
+        return doConnect(address, false);
     }
 
     SockAddrAny addrStorage = address;

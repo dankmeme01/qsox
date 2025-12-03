@@ -7,22 +7,32 @@ using hclock = std::chrono::high_resolution_clock;
 
 namespace qsox {
 
-NetResult<void> TcpStream::doConnect(const SocketAddress& address) {
+NetResult<void> TcpStream::doConnect(const SocketAddress& address, bool nonBlocking) {
     // convert address
     SockAddrAny addrStorage = address;
 
-    return mapResult(
-        ::connect(m_fd, addrStorage.asSockaddr(), addrStorage.size())
-    );
+    if (nonBlocking) {
+        GEODE_UNWRAP(this->setNonBlocking(true));
+    }
+
+    auto res = mapResult(::connect(m_fd, addrStorage.asSockaddr(), addrStorage.size()));
+    if (res.isErr()) {
+        auto err = res.unwrapErr();
+        if (nonBlocking && (err == Error::WouldBlock || err == Error::InProgress)) {
+            return Ok();
+        } else {
+            return Err(err);
+        }
+    }
+    return Ok();
 }
 
 NetResult<void> TcpStream::doConnectTimeout(const SocketAddress& address, int timeoutMs) {
     if (timeoutMs <= 0) {
-        return doConnect(address);
+        return doConnect(address, false);
     }
 
-    GEODE_UNWRAP(this->setNonBlocking(true));
-    auto result = this->doConnect(address);
+    auto result = this->doConnect(address, true);
     GEODE_UNWRAP(this->setNonBlocking(false));
 
     if (result.isErr() && result.unwrapErr() == Error::WouldBlock) {
