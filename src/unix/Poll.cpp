@@ -20,7 +20,6 @@ NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs) 
     }
 
     while (true) {
-        // TODO: windows uses select
         int res = ::poll(&pfd, 1, timeoutMs);
 
         if (res == 0) {
