@@ -44,18 +44,10 @@ NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs) 
         if (res == 0) {
             return Ok(PollResult::Timeout);
         } else if (res == SOCKET_ERROR) {
-            auto error = Error::lastOsError();
-            if (error.osCode() == WSAEINTR) {
-                // interrupted by a signal, retry
-                continue;
-            } else {
-                return Err(error);
-            }
+            return Err(Error::lastOsError());
         } else {
             break;
         }
-
-        // TODO: this should decrease interval when interrupted
     }
 
     if (FD_ISSET(fd, &readSet)) {
@@ -66,7 +58,7 @@ NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs) 
         return Err(socket.getSocketError()); // socket has an error
     }
 
-    // TODO: uhh idk if reachable
+    // shouldn't be reachable
     return Ok(PollResult::None);
 }
 

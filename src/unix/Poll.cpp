@@ -49,7 +49,7 @@ NetResult<PollResult> pollOne(BaseSocket& socket, PollType poll, int timeoutMs) 
         return Err(socket.getSocketError()); // socket has an error
     }
 
-    // TODO: uhh idk if reachable
+    // shouldn't be reachable
     return Ok(PollResult::None);
 }
 

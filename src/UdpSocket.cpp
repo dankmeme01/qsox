@@ -29,7 +29,6 @@ NetResult<void> UdpSocket::connect(const SocketAddress& address) {
 }
 
 NetResult<void> UdpSocket::disconnect() {
-    // TODO: is this cross platform?
     struct sockaddr unspec = {};
     unspec.sa_family = AF_UNSPEC;
 
