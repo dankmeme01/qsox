@@ -114,8 +114,8 @@ NetResult<size_t> UdpSocket::peek(void* buffer, size_t size) {
 NetResult<size_t> UdpSocket::_sendTo(const void* buffer, size_t size, const SocketAddress& destination, int flags) {
     SockAddrAny addrStorage = destination;
 
-#ifdef _WIN32
-    // On lovely operating systems like windows, an IPv6 socket cannot send to an IPv4 address,
+#if defined _WIN32 || defined __APPLE__
+    // On lovely operating systems like windows and mac, an IPv6 socket cannot send to an IPv4 address,
     // but can send to an IPv4-mapped IPv6 address, so perform the conversion here.
     if (this->ipv6 && destination.isV4()) {
         SocketAddressV6 v6Addr{};
