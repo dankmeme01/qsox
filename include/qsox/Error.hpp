@@ -53,6 +53,8 @@ namespace qsox {
         static std::string osMessage(int osCode);
     };
 
+    inline auto format_as(const Error& err) { return err.message(); }
+
     template <typename T = void, typename E = std::string>
     using Result = geode::Result<T, E>;
 
@@ -88,7 +90,8 @@ namespace qsox {
         std::string_view message() const; \
     private: \
         Code m_code; \
-    }
+    }; \
+    inline auto format_as(const name& err) { return err.message(); }
 
 #define QSOX_MAKE_OPAQUE_ERROR_STRUCT(name, ty) \
     struct name { \
@@ -100,4 +103,5 @@ namespace qsox {
         constexpr inline bool operator!=(const name& other) const { return !(*this == other); } \
         bool ok() const; \
         std::string_view message() const; \
-    }
+    }; \
+    inline auto format_as(const name& err) { return err.message(); }
