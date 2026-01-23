@@ -20,8 +20,8 @@ public:
     NetworkAddress(std::string host, uint16_t port) : m_host(std::move(host)), m_port(port) {}
     NetworkAddress(const NetworkAddress&) = default;
     NetworkAddress& operator=(const NetworkAddress&) = default;
-    NetworkAddress(NetworkAddress&&) = default;
-    NetworkAddress& operator=(NetworkAddress&&) = default;
+    NetworkAddress(NetworkAddress&&) noexcept = default;
+    NetworkAddress& operator=(NetworkAddress&&) noexcept = default;
 
     // allow construction from a SocketAddress
     NetworkAddress(const SocketAddress& address) : m_host(address.address().toString()), m_port(address.port()) {}
