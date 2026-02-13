@@ -96,7 +96,7 @@ std::string Error::message() const {
 [[noreturn]] void unreachable() {
     assert(false && "Unreachable code reached");
 
-#ifdef __clang__
+#if defined(__clang__) || defined(__GNUC__)
     __builtin_unreachable();
 #else
     __assume(false);

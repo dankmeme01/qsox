@@ -12,9 +12,9 @@
 
 namespace qsox {
 
-Ipv4Address Ipv4Address::LOCALHOST{127, 0, 0, 1};
-Ipv4Address Ipv4Address::UNSPECIFIED{0, 0, 0, 0};
-Ipv4Address Ipv4Address::BROADCAST{255, 255, 255, 255};
+const Ipv4Address Ipv4Address::LOCALHOST{127, 0, 0, 1};
+const Ipv4Address Ipv4Address::UNSPECIFIED{0, 0, 0, 0};
+const Ipv4Address Ipv4Address::BROADCAST{255, 255, 255, 255};
 
 std::string_view Ipv4ParseError::message() const {
     switch (m_code) {

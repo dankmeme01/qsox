@@ -17,7 +17,7 @@ QSOX_MAKE_ERROR_STRUCT(SocketAddressV4ParseError,
 
 class SocketAddressV4 {
 public:
-    constexpr inline SocketAddressV4() : m_address(Ipv4Address::UNSPECIFIED), m_port(0) {}
+    inline SocketAddressV4() : m_address(Ipv4Address::UNSPECIFIED), m_port(0) {}
     constexpr inline SocketAddressV4(const Ipv4Address& address, uint16_t port = 0) : m_address(address), m_port(port) {}
     constexpr inline SocketAddressV4(const SocketAddressV4& other) = default;
     constexpr inline SocketAddressV4& operator=(const SocketAddressV4& other) = default;

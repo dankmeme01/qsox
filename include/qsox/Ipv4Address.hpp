@@ -19,13 +19,13 @@ QSOX_MAKE_ERROR_STRUCT(Ipv4ParseError,
 class Ipv4Address {
 public:
     // Represents 127.0.0.1
-    static Ipv4Address LOCALHOST;
+    static const Ipv4Address LOCALHOST;
 
     // Represents 0.0.0.0
-    static Ipv4Address UNSPECIFIED;
+    static const Ipv4Address UNSPECIFIED;
 
     // Represents 255.255.255.255
-    static Ipv4Address BROADCAST;
+    static const Ipv4Address BROADCAST;
 
     constexpr inline Ipv4Address() : Ipv4Address(0, 0, 0, 0) {}
     constexpr inline Ipv4Address(uint8_t a, uint8_t b, uint8_t c, uint8_t d) : m_octets{a, b, c, d} {}

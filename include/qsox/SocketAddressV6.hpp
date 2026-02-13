@@ -16,7 +16,7 @@ QSOX_MAKE_ERROR_STRUCT(SocketAddressV6ParseError,
 
 class SocketAddressV6 {
 public:
-    constexpr inline SocketAddressV6() : m_address(Ipv6Address::UNSPECIFIED), m_port(0) {}
+    inline SocketAddressV6() : m_address(Ipv6Address::UNSPECIFIED), m_port(0) {}
     constexpr inline SocketAddressV6(const Ipv6Address& address, uint16_t port = 0) : m_address(address), m_port(port) {}
     constexpr inline SocketAddressV6(const SocketAddressV6& other) = default;
     constexpr inline SocketAddressV6& operator=(const SocketAddressV6& other) = default;
