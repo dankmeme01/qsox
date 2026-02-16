@@ -6,6 +6,22 @@
 
 namespace qsox {
 
+static SockAddrAny constructDestAddr(const SocketAddress& address, bool ipv6) {
+#if !defined(__linux__)
+    // On non-Linux systems, an IPv6 socket cannot send to an IPv4 address,
+    // but can send to an IPv4-mapped IPv6 address, so perform the conversion here.
+    if (ipv6 && address.isV4()) {
+        SocketAddressV6 v6Addr{};
+        v6Addr.setAddress(Ipv6Address::fromIpv4Mapped(address.toV4().address()));
+        v6Addr.setPort(address.port());
+
+        return SockAddrAny{v6Addr};
+    }
+#endif
+
+    return SockAddrAny{address};
+}
+
 UdpSocket::UdpSocket(SockFd fd) : BaseSocket(fd) {}
 
 NetResult<UdpSocket> UdpSocket::bind(const SocketAddress& address) {
@@ -23,9 +39,9 @@ NetResult<UdpSocket> UdpSocket::bindAny(bool ipv6) {
 }
 
 NetResult<void> UdpSocket::connect(const SocketAddress& address) {
-    SockAddrAny addrStorage = address;
+    SockAddrAny sa = constructDestAddr(address, this->ipv6);
 
-    return mapResult(::connect(m_fd, addrStorage.asSockaddr(), addrStorage.size()));
+    return mapResult(::connect(m_fd, sa.asSockaddr(), sa.size()));
 }
 
 NetResult<void> UdpSocket::disconnect() {
@@ -112,22 +128,10 @@ NetResult<size_t> UdpSocket::peek(void* buffer, size_t size) {
 }
 
 NetResult<size_t> UdpSocket::_sendTo(const void* buffer, size_t size, const SocketAddress& destination, int flags) {
-    SockAddrAny addrStorage = destination;
-
-#if defined _WIN32 || defined __APPLE__
-    // On lovely operating systems like windows and mac, an IPv6 socket cannot send to an IPv4 address,
-    // but can send to an IPv4-mapped IPv6 address, so perform the conversion here.
-    if (this->ipv6 && destination.isV4()) {
-        SocketAddressV6 v6Addr{};
-        v6Addr.setAddress(Ipv6Address::fromIpv4Mapped(destination.toV4().address()));
-        v6Addr.setPort(destination.port());
-
-        addrStorage = v6Addr;
-    }
-#endif
+    SockAddrAny sa = constructDestAddr(destination, this->ipv6);
 
     auto sent = ::sendto(m_fd, static_cast<const char*>(buffer), size, flags,
-                          addrStorage.asSockaddr(), addrStorage.size());
+                          sa.asSockaddr(), sa.size());
 
     if (sent < 0) {
         return Err(Error::lastOsError());
