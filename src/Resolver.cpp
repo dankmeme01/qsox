@@ -92,7 +92,7 @@ static Result<qaddrinfo*> gai(const std::string& hostname, int family, int timeo
     tv.tv_sec = timeoutMs / 1000;
     tv.tv_usec = (timeoutMs % 1000) * 1000;
 
-    int ret = GetAddrInfoExW(name.c_str(), nullptr, NS_ALL, nullptr, &hints, &result, &tv, nullptr, nullptr, nullptr);
+    int ret = GetAddrInfoExW(name.c_str(), nullptr, NS_ALL, nullptr, &hints, &result, timeoutMs ? &tv : nullptr, nullptr, nullptr, nullptr);
     if (ret != 0) {
         return Err(makeError(ret));
     }
@@ -122,7 +122,7 @@ static Result<qaddrinfo*> gai(const std::string& hostname, int family, int timeo
     ts.tv_sec = timeoutMs / 1000;
     ts.tv_nsec = (timeoutMs % 1000) * 1000000;
 
-    ret = gai_suspend(reqs, 1, &ts);
+    ret = gai_suspend(reqs, 1, timeoutMs ? &ts : nullptr);
     if (ret == EAI_INPROGRESS) {
         // timed out
         gai_cancel(reqs[0]);
