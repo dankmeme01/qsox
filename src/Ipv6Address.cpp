@@ -10,8 +10,8 @@
 
 namespace qsox {
 
-Ipv6Address Ipv6Address::LOCALHOST{0, 0, 0, 0, 0, 0, 0, 1};
-Ipv6Address Ipv6Address::UNSPECIFIED{0, 0, 0, 0, 0, 0, 0, 0};
+const Ipv6Address Ipv6Address::LOCALHOST{0, 0, 0, 0, 0, 0, 0, 1};
+const Ipv6Address Ipv6Address::UNSPECIFIED{0, 0, 0, 0, 0, 0, 0, 0};
 
 std::string_view Ipv6ParseError::message() const {
     switch (m_code) {

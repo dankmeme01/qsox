@@ -17,40 +17,40 @@ QSOX_MAKE_ERROR_STRUCT(SocketAddressV4ParseError,
 
 class SocketAddressV4 {
 public:
-    inline SocketAddressV4() : m_address(Ipv4Address::UNSPECIFIED), m_port(0) {}
-    constexpr inline SocketAddressV4(const Ipv4Address& address, uint16_t port = 0) : m_address(address), m_port(port) {}
-    constexpr inline SocketAddressV4(const SocketAddressV4& other) = default;
-    constexpr inline SocketAddressV4& operator=(const SocketAddressV4& other) = default;
+    constexpr SocketAddressV4() : m_address(Ipv4Address{}), m_port(0) {}
+    constexpr SocketAddressV4(const Ipv4Address& address, uint16_t port = 0) : m_address(address), m_port(port) {}
+    constexpr SocketAddressV4(const SocketAddressV4& other) = default;
+    constexpr SocketAddressV4& operator=(const SocketAddressV4& other) = default;
 
-    constexpr inline bool operator==(const SocketAddressV4& other) const {
+    constexpr bool operator==(const SocketAddressV4& other) const {
         return m_address == other.m_address && m_port == other.m_port;
     }
 
-    constexpr inline bool operator!=(const SocketAddressV4& other) const {
+    constexpr bool operator!=(const SocketAddressV4& other) const {
         return !(*this == other);
     }
 
-    static constexpr inline SocketAddressV4 any() {
+    static constexpr SocketAddressV4 any() {
         return SocketAddressV4(Ipv4Address::UNSPECIFIED, 0);
     }
 
-    constexpr inline const Ipv4Address& address() const {
+    constexpr const Ipv4Address& address() const {
         return m_address;
     }
 
-    constexpr inline Ipv4Address& address() {
+    constexpr Ipv4Address& address() {
         return m_address;
     }
 
-    constexpr inline uint16_t port() const {
+    constexpr uint16_t port() const {
         return m_port;
     }
 
-    constexpr inline void setPort(uint16_t port) {
+    constexpr void setPort(uint16_t port) {
         m_port = port;
     }
 
-    constexpr inline void setAddress(const Ipv4Address& address) {
+    constexpr void setAddress(const Ipv4Address& address) {
         m_address = address;
     }
 

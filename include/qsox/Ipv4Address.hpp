@@ -27,14 +27,14 @@ public:
     // Represents 255.255.255.255
     static const Ipv4Address BROADCAST;
 
-    constexpr inline Ipv4Address() : Ipv4Address(0, 0, 0, 0) {}
-    constexpr inline Ipv4Address(uint8_t a, uint8_t b, uint8_t c, uint8_t d) : m_octets{a, b, c, d} {}
-    constexpr inline Ipv4Address(const std::array<uint8_t, 4>& octets) : m_octets(octets) {}
+    constexpr Ipv4Address() : Ipv4Address(0, 0, 0, 0) {}
+    constexpr Ipv4Address(uint8_t a, uint8_t b, uint8_t c, uint8_t d) : m_octets{a, b, c, d} {}
+    constexpr Ipv4Address(const std::array<uint8_t, 4>& octets) : m_octets(octets) {}
 
-    constexpr inline Ipv4Address(const Ipv4Address& other) = default;
-    constexpr inline Ipv4Address& operator=(const Ipv4Address& other) = default;
+    constexpr Ipv4Address(const Ipv4Address& other) = default;
+    constexpr Ipv4Address& operator=(const Ipv4Address& other) = default;
 
-    constexpr inline static Ipv4Address fromBits(uint32_t bits) {
+    constexpr static Ipv4Address fromBits(uint32_t bits) {
         return Ipv4Address(
             static_cast<uint8_t>((bits >> 24) & 0xFF),
             static_cast<uint8_t>((bits >> 16) & 0xFF),
@@ -43,30 +43,30 @@ public:
         );
     }
 
-    constexpr inline uint32_t toBits() const {
+    constexpr uint32_t toBits() const {
         return (static_cast<uint32_t>(m_octets[0]) << 24) |
                (static_cast<uint32_t>(m_octets[1]) << 16) |
                (static_cast<uint32_t>(m_octets[2]) << 8) |
                static_cast<uint32_t>(m_octets[3]);
     }
 
-    constexpr inline uint8_t operator[](size_t index) const {
+    constexpr uint8_t operator[](size_t index) const {
         return m_octets[index];
     }
 
-    constexpr inline uint8_t& operator[](size_t index) {
+    constexpr uint8_t& operator[](size_t index) {
         return m_octets[index];
     }
 
-    constexpr inline bool operator==(const Ipv4Address& other) const {
+    constexpr bool operator==(const Ipv4Address& other) const {
         return m_octets == other.m_octets;
     }
 
-    constexpr inline bool operator!=(const Ipv4Address& other) const {
+    constexpr bool operator!=(const Ipv4Address& other) const {
         return !(*this == other);
     }
 
-    constexpr inline std::strong_ordering operator<=>(const Ipv4Address& rhs) {
+    constexpr std::strong_ordering operator<=>(const Ipv4Address& rhs) {
         if (m_octets == rhs.m_octets) {
             return std::strong_ordering::equal;
         }
@@ -74,11 +74,11 @@ public:
         return m_octets < rhs.m_octets ? std::strong_ordering::less : std::strong_ordering::greater;
     }
 
-    constexpr inline const std::array<uint8_t, 4>& octets() const {
+    constexpr const std::array<uint8_t, 4>& octets() const {
         return m_octets;
     }
 
-    constexpr inline std::array<uint8_t, 4>& octets() {
+    constexpr std::array<uint8_t, 4>& octets() {
         return m_octets;
     }
 
@@ -88,12 +88,12 @@ public:
     static Ipv4Address fromInAddr(const in_addr& addr);
 
     // Returns whether the address is unspecified (0.0.0.0)
-    constexpr inline bool isUnspecified() const {
+    constexpr bool isUnspecified() const {
         return m_octets == std::array<uint8_t, 4>{0, 0, 0, 0};
     }
 
     // Returns whether the address is a loopback address (127.0.0.0/8)
-    constexpr inline bool isLocalhost() const {
+    constexpr bool isLocalhost() const {
         return m_octets[0] == 127;
     }
 
@@ -105,7 +105,7 @@ public:
     }
 
     // Returns whether the address is a broadcast address
-    constexpr inline bool isBroadcast() const {
+    constexpr bool isBroadcast() const {
         return m_octets == BROADCAST.m_octets;
     }
 
