@@ -31,11 +31,15 @@ if (WIN32)
     target_link_libraries(${PROJECT_NAME} PUBLIC ws2_32) # link to winsock
 endif()
 
-CPMAddPackage("gh:geode-sdk/result@1.3.2")
-CPMAddPackage("gh:fmtlib/fmt#11.2.0")
+if (NOT TARGET GeodeResult)
+    CPMAddPackage("gh:geode-sdk/result@1.4.1")
+endif()
+if (NOT TARGET fmt)
+    CPMAddPackage("gh:fmtlib/fmt#12.1.0")
+endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC GeodeResult)
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt)
 target_compile_definitions(${PROJECT_NAME} PRIVATE NOMINMAX=1)
 
 # weird stuff
