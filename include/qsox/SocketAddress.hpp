@@ -67,7 +67,7 @@ public:
         return !(*this == other);
     }
 
-     bool operator==(const SocketAddressV6& other) const {
+    constexpr bool operator==(const SocketAddressV6& other) const {
         return m_address.isV6() && m_address.asV6() == other.address() && m_port == other.port();
     }
 
