@@ -3,9 +3,9 @@
 #include <fmt/format.h>
 
 #ifdef _WIN32
-# include <ws2tcpip.h> // inet_pton
+# include <ws2tcpip.h>
 #else
-# include <arpa/inet.h> // inet_pton
+# include <arpa/inet.h>
 #endif
 
 namespace qsox {
@@ -82,11 +82,16 @@ Ipv6Address Ipv6Address::fromIpv4Mapped(const Ipv4Address& addr) {
     return Ipv6Address(octets);
 }
 
-Result<Ipv6Address, Ipv6ParseError> Ipv6Address::parse(const std::string& str) {
+Result<Ipv6Address, Ipv6ParseError> Ipv6Address::parse(std::string_view str) {
     // Parsing an IPv6 address is significantly more complex than ipv4, so let's just use inet_pton for now
 
+    char buf[256];
+    size_t addrLen = std::min<size_t>(str.size(), 255);
+    std::memcpy(buf, str.data(), addrLen);
+    buf[addrLen] = '\0';
+
     Ipv6Address addr;
-    if (inet_pton(AF_INET6, str.c_str(), addr.m_octets.data()) != 1) {
+    if (inet_pton(AF_INET6, buf, addr.m_octets.data()) != 1) {
         return Err(Ipv6ParseError::Unspecified);
     }
 

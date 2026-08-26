@@ -53,7 +53,7 @@ Result<SocketAddressV6, SocketAddressV6ParseError> SocketAddressV6::parse(std::s
     addressPart.remove_prefix(1); // remove '['
     addressPart.remove_suffix(1); // remove ']'
 
-    auto address = Ipv6Address::parse(std::string(addressPart));
+    auto address = Ipv6Address::parse(addressPart);
     if (address.isErr()) {
         return Err(fromIpError(address.unwrapErr()));
     }

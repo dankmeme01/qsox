@@ -68,7 +68,7 @@ public:
     // Common methods
 
     std::string toString() const;
-    static Result<IpAddress, void> parse(const std::string& str);
+    static Result<IpAddress, void> parse(std::string_view str);
 
     constexpr bool isLocalhost() const {
         return this->isV4() ? this->asV4().isLocalhost() : this->asV6().isLocalhost();

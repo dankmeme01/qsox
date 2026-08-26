@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(qsox VERSION 1.0.0)
 
+option(QSOX_BUILD_TESTS "Build tests" OFF)
+
 if (WIN32)
     file(GLOB OS_SOURCES "src/win32/*.cpp")
 else()
@@ -52,3 +54,18 @@ install(TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION bin
 )
 install(DIRECTORY include/ DESTINATION include)
+
+if (QSOX_BUILD_TESTS)
+    # unit tests (gtest)
+
+    enable_testing()
+
+    CPMAddPackage("gh:google/googletest@1.18.0")
+
+    file(GLOB TEST_SOURCES CONFIGURE_DEPENDS "test/*.cpp")
+    add_executable(qsox_tests ${TEST_SOURCES})
+    target_link_libraries(qsox_tests PRIVATE ${PROJECT_NAME} gtest_main)
+
+    include(GoogleTest)
+    gtest_discover_tests(qsox_tests)
+endif()

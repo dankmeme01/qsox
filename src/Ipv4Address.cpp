@@ -1,7 +1,7 @@
 #include <qsox/Ipv4Address.hpp>
 #include <qsox/Util.hpp>
 #include <fmt/format.h>
-#include <charconv>
+#include "NumUtil.hpp"
 
 #ifdef _WIN32
 # include <WinSock2.h>
@@ -44,14 +44,12 @@ Result<Ipv4Address, Ipv4ParseError> Ipv4Address::parse(std::string_view str) {
 
         std::string_view octetStr = str.substr(0, nextDot);
 
-        uint8_t octet;
-        auto result = std::from_chars(&*octetStr.begin(), &*octetStr.end(), octet);
-
-        if (result.ec != std::errc()) {
+        auto result = parseNum<uint8_t>(octetStr);
+        if (!result) {
             return Err(Ipv4ParseError::InvalidOctet);
         }
 
-        out.m_octets[i] = octet;
+        out.m_octets[i] = *result;
 
         if (i < 3) {
             str.remove_prefix(nextDot + 1); // move past the dot

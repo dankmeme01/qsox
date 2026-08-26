@@ -15,9 +15,9 @@ std::string IpAddress::toString() const {
     return this->isV6() ? this->asV6().toString() : this->asV4().toString();
 }
 
-Result<IpAddress, void> IpAddress::parse(const std::string& str) {
-    // early skip v4 if the address is too long or too short
-    if (str.size() < 7 || str.size() > 15) {
+Result<IpAddress, void> IpAddress::parse(std::string_view str) {
+    // early skip v4 if the address has a colon, IPv4 cannot contain colons and IPv6 must contain at least one
+    if (str.find(':') != std::string_view::npos) {
         if (auto v6 = Ipv6Address::parse(str)) {
             return Ok(IpAddress(*v6));
         } else {

@@ -69,7 +69,7 @@ public:
 
     std::array<uint16_t, 8> segments() const;
 
-    static Result<Ipv6Address, Ipv6ParseError> parse(const std::string& str);
+    static Result<Ipv6Address, Ipv6ParseError> parse(std::string_view str);
     std::string toString() const;
     void toInAddr(in6_addr& addr) const;
     static Ipv6Address fromInAddr(const in6_addr& addr);

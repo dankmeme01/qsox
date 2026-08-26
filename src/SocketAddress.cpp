@@ -48,14 +48,14 @@ Result<SocketAddress, SocketAddressParseError> SocketAddress::parse(std::string_
         addressPart.remove_prefix(1);
         addressPart.remove_suffix(1);
 
-        auto addr = Ipv6Address::parse(std::string(addressPart));
+        auto addr = Ipv6Address::parse(addressPart);
         if (!addr) {
             return Err(SocketAddressParseError::InvalidAddress);
         }
 
         outAddr = *addr;
     } else {
-        auto addr = Ipv4Address::parse(std::string(addressPart));
+        auto addr = Ipv4Address::parse(addressPart);
         if (!addr) {
             return Err(SocketAddressParseError::InvalidAddress);
         }
