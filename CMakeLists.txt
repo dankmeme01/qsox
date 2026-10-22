@@ -34,10 +34,10 @@ if (WIN32)
 endif()
 
 if (NOT TARGET GeodeResult)
-    CPMAddPackage("gh:geode-sdk/result@1.4.1")
+    CPMAddPackage("gh:geode-sdk/result@1.5.0")
 endif()
 if (NOT TARGET fmt)
-    CPMAddPackage("gh:fmtlib/fmt#12.1.0")
+    CPMAddPackage("gh:fmtlib/fmt#12.2.0")
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC GeodeResult)
