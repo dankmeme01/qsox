@@ -1,6 +1,7 @@
 #include <qsox/Ipv6Address.hpp>
 #include <qsox/Util.hpp>
 #include <fmt/format.h>
+#include <cstring>
 
 #ifdef _WIN32
 # include <ws2tcpip.h>
